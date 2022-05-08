@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #### Installation
  ###### Clone the repository:
   - ssh
@@ -12,7 +11,3 @@
 
 #### Usage
  - Use crf component --help for details about options on creating component. 
-=======
-# create-rect-files
-CLI Tool for generating react components
->>>>>>> main
