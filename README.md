@@ -1,12 +1,12 @@
 #### Installation
- Clone the repository:
-  ssh
+ ###### Clone the repository:
+  - ssh
    `git clone git@github.com:srikarpohar/create-react-files.git`
-  https
+  - https
    `git clone https://github.com/srikarpohar/create-react-files.git`
- Install the dependencies:
+ ###### Install the dependencies:
   `npm i`
- Install the package globally on your machine:
+ ###### Install the package globally on your machine:
   `npm i -g`
 
 #### Usage
