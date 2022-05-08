@@ -1,6 +1,6 @@
 {
   "name": "create-react-files-tsjsscss",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Command Line tool for creating react components and scss files etc.",
   "main": "index.js",
   "type": "module",
