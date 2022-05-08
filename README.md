@@ -1,3 +1,4 @@
+###### CLI Tool for creating react components and css files(with given css extension).
 #### Installation
  ###### Clone the repository:
   - ssh
