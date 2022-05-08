@@ -1,4 +1,9 @@
-###### CLI Tool for creating react components and css files(with given css extension).
+#### A CLI Tool for creating react components and css files(with given css extension).
+
+#### Features
+1. Creates basic react components in TS and JS.
+2. Creates CSS Files with given extension(css, scss, css.ts) for the react component.
+
 #### Installation
  ###### Clone the repository:
   - ssh
