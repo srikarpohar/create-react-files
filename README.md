@@ -7,7 +7,7 @@
  ###### Install the dependencies:
   `npm i`
  ###### Install the package globally on your machine:
-  `npm i -g`
+  `npm i -g .`
 
 #### Usage
  - Use crf component --help for details about options on creating component. 
