@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import path from "path";
 import { rmdir, mkdir, writeFile } from "fs/promises";
+import { access } from "fs";
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -85,22 +86,33 @@ export async function createComponent(component_name, options) {
         } else {
             let currentWorkingDirectory = path.normalize(process.cwd());
             const componentNameArr = component_name.split("-"),
-                finalComponentName = componentNameArr.map(doc => capitalizeFirstLetter(doc)).join("");
+                finalComponentName = componentNameArr.map(doc => capitalizeFirstLetter(doc)).join(""),
+                finalComponentPath = `${currentWorkingDirectory}/${component_name}`;
+            
+            access(finalComponentPath, async (err) => {
+                if(!err) {
+                    if(options.force) {
+                        await rmdir(finalComponentPath, { recursive: true });
+                    } else {
+                        console.log(chalk.red.bold("Component already exists. Use --force to replace the component"));
+                        return;
+                    }
+                }
 
-            await rmdir(currentWorkingDirectory + '/' + component_name, { recursive: true })
-            await mkdir(currentWorkingDirectory + '/' + component_name)
-            currentWorkingDirectory = `${currentWorkingDirectory}/${component_name}`;
+                await mkdir(finalComponentPath)
+                currentWorkingDirectory = `${currentWorkingDirectory}/${component_name}`;
 
-            let fileContents = '';
-            if(options.type == 'typescript') {
-                fileContents = createTSComponent(options, finalComponentName);
-                await writeFile(`${currentWorkingDirectory}/${component_name}.tsx`, fileContents);
-            } else {
-                fileContents = createJSComponent(options, finalComponentName);
-                await writeFile(`${currentWorkingDirectory}/${component_name}.jsx`, fileContents);
-            }
+                let fileContents = '';
+                if(options.type == 'typescript') {
+                    fileContents = createTSComponent(options, finalComponentName);
+                    await writeFile(`${currentWorkingDirectory}/${component_name}.tsx`, fileContents);
+                } else {
+                    fileContents = createJSComponent(options, finalComponentName);
+                    await writeFile(`${currentWorkingDirectory}/${component_name}.jsx`, fileContents);
+                }
 
-            await writeFile(`${currentWorkingDirectory}/${component_name}.scss`, '');
+                await writeFile(`${currentWorkingDirectory}/${component_name}.${options.cssext}`, '');
+            });
         }
     } catch(error) {
         throw error;
