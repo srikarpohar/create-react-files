@@ -18,4 +18,4 @@ async function main() {
     await program.parseAsync();
 }
 
-await main();
+main();
