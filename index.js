@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
 import {createComponent} from "./commands/createComponent.js";
+import { Command } from './command-creator/command.js';
 
 async function main() {
-    program.command('component <component_name>')
-    .option('-f --functional', 'Functional Component', false)
-    .option('-c --class', 'Class Component', false)
-    .option('-t --type [type]', `Component is 'typescript' one or 'javascript' one`, 'typescript')
-    .option('-r, --redux-connect', 'Add redux connect option', false)
-    .option('--cssext [cssExt]', `CSS Extension of the component's css file`, 'css')
-    .option('--force', 'Force remove and replace the component file if it exists already', false)
-    .description("Creates a react component with given name and options.")
-    .action(createComponent);
 
+    const command = new Command();
+    command.createCommand('component <component_name>', "Creates a react component with given name and options.");
+    command.createOption('-f --functional', 'Functional Component', false);
+    command.createOption('-c --class', 'Class Component', false);
+    command.createOption('-t --type [type]', `Component is 'typescript' one or 'javascript' one`, 'typescript');
+    command.createOption('-r, --redux-connect', 'Add redux connect option', false);
+    command.createOption('--cssext [cssExt]', `CSS Extension of the component's css file`, 'css');
+    command.createOption('--force', 'Force remove and replace the component file if it exists already', false);
 
-    await program.parseAsync();
+    command.createAction(createComponent);
+    await command.parseAsync();
 }
 
 main();

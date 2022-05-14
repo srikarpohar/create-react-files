@@ -2,10 +2,7 @@ import chalk from 'chalk';
 import path from "path";
 import { rmdir, mkdir, writeFile } from "fs/promises";
 import { access } from "fs";
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+import { capitalizeFirstLetter } from '../command-creator/utils.js';
 
 function createFunctionLines(functionLines, insideClass) {
     let func = insideClass ? '\t' : '';
@@ -59,12 +56,13 @@ function createTSComponent(options, componentName) {
             'return (<div></div>);'];
         importLines.push('import { useState } from "react";');
 
-        fileContents = `${importLines.join('\n')}\ninterface IProps{\n\n}\ninterface IState{\n\n}\nexport const ${componentName} = (props: IProps) => {\n\t${functionLines.join('\n\n\t')}\n}`;
+        fileContents = `${importLines.join('\n')}\n\ninterface IProps{\n\n}\n\ninterface IState{\n\n}\n\nexport const ${componentName} = (props: IProps) => {\n\t${functionLines.join('\n\n\t')}\n}`;
     } else {
-        importLines.push('import { Component } from "react";');
+        importLines.push('import React from "react";');
         let reduxLines = ['const mapStateToProps = (state: any, ownProps: any) => {', 'return {};', '}', 
             'const mapDispatchToProps = (dispatch: any) => {', 'return {};', '}'],
-            componentDidUpdateLines = ['componentDidMount(props: IProps){', 'super(props);', 'this.state = {};', '}'],
+            constructorLines = ['constructor(props:IProps){', 'super(props);', 'this.state = {};', '}'],
+            componentDidUpdateLines = ['componentDidMount(){', '}'],
             renderMethodLines = ['render(){', 'return (<div></div>);', '}'],
             reduxFileData = '';
 
@@ -73,7 +71,8 @@ function createTSComponent(options, componentName) {
             reduxFileData = `\n${createFunctionLines(reduxLines.slice(0,3), false)}\n${createFunctionLines(reduxLines.slice(3, 6), false)}\nexport default connect(mapStateToProps, mapDispatchToProps)(${componentName});`
         }
 
-        fileContents = `${importLines.join('\n')}\n\n${options.reduxConnect ? 'class' : 'export class'} ${componentName} extends Component{\n\n${createFunctionLines(componentDidUpdateLines, true)}\n${createFunctionLines(renderMethodLines, true)}}\n${reduxFileData}}`
+        fileContents = `${importLines.join('\n')}\n\ninterface IProps{\n\n}\n\ninterface IState{\n\n}\n\n`;
+        fileContents = `${fileContents}${options.reduxConnect ? 'class' : 'export class'} ${componentName} extends React.Component<IProps, IState>{\n\n${createFunctionLines(constructorLines, true)}\n${createFunctionLines(componentDidUpdateLines, true)}\n${createFunctionLines(renderMethodLines, true)}}\n${reduxFileData}`
     }
 
     return fileContents;
